@@ -5,5 +5,5 @@ function accpet(id, roll) {
   console.log(value);
   console.log(roll);
   console.log(id);
-  window.location.href = `http://localhost/lms/admin/accept.php?id1=${id}&id2=${roll}&id3=${value}`;
+  window.location.href = `http://localhost/lms/admin/accept.php?id1=${id}&id2=${roll}&id3=${value}&id4=${limits}`;
 }

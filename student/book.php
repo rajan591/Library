@@ -88,6 +88,21 @@ if ($_SESSION['RollNo']) {
                                         }
                                     else
                                         $sql="select * from LMS.book order by Availability DESC";
+                                        $RollNo = $_SESSION['RollNo'];
+                                        echo $RollNo;
+                                        $mysql ="select limits from LMS.user WHERE RollNo=$RollNo";
+                                                      $result5=$conn->query($mysql);
+
+                                        
+                                // $generatedNumber = mysqli_num_rows($res)
+                                if($result5->num_rows > 0){
+                                   while($row = $result5->fetch_assoc()){
+                                       echo "Limits:".$row['limits']."<br>";
+                                       $limits =$row['limits'];
+                                       echo $limits;
+                                   }
+                                }  
+                                        echo $mysql;
 
                                     $result=$conn->query($sql);
                                     $rowcount=mysqli_num_rows($result);
@@ -99,13 +114,15 @@ if ($_SESSION['RollNo']) {
 
                                     
                                     ?>
+                                 
                         <table class="table" id = "tables">
                                   <thead>
                                     <tr>
                                       <th>Book id</th>
                                       <th>Book name</th>
                                       <th>Availability</th>
-                                      <th></th>
+                                      <th>Action</th>
+                                      <th>limits</th>
                                     </tr>
                                   </thead>
                                   <tbody>
@@ -117,12 +134,15 @@ if ($_SESSION['RollNo']) {
                                 $bookid=$row['BookId'];
                                 $name=$row['Title'];
                                 $avail=$row['Availability'];
+                                // $limits=$row['limits'];
+                                
+                               
                             ?>
                                     <tr>
                                       <td><?php echo $bookid ?></td>
                                       <td><?php echo $name ?></td>
                                       <td><b><?php 
-                                           if($avail > 0)
+                                           if($avail > 0 )
                                               echo "<font color=\"green\">AVAILABLE</font>";
                                             else
                                             	echo "<font color=\"red\">NOT AVAILABLE</font>";
@@ -132,10 +152,11 @@ if ($_SESSION['RollNo']) {
                                                  </b></td>
                                       <td><center><a href="bookdetails.php?id=<?php echo $bookid; ?>" class="btn btn-primary">Details</a>
                                       	<?php
-                                      	if($avail > 0)
+                                      	if($avail > 0 & $limits>0)
                                       		echo "<a href=\"issue_request.php?id=".$bookid."\" class=\"btn btn-success\">Issue</a>";
                                         ?>
                                         </center></td>
+                                        <td><?php echo $limits ?></td>
                                     </tr>
                                <?php }} ?>
                                </tbody>

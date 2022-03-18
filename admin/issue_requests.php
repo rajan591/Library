@@ -86,6 +86,7 @@ if ($_SESSION['RollNo']) {
                                       <th>Book Id</th>
                                       <th>Book Name</th>
                                       <th>Availabilty</th>
+                                      <th>Limits</th>
                                         <th>select book code</th>
                                       <th>Action</th>
                                          
@@ -93,7 +94,7 @@ if ($_SESSION['RollNo']) {
                                   </thead>
                                   <tbody>
                                     <?php
-                            $sql="select * from LMS.record,LMS.book where Date_of_Issue is NULL and record.BookId=book.BookId order by Time";
+                            $sql="select * from LMS.record,LMS.book,LMS.user where Date_of_Issue is NULL and record.BookId=book.BookId and record.RollNo=user.RollNo  order by Time";
                             $result=$conn->query($sql);
                             while($row=$result->fetch_assoc())
                             {
@@ -102,13 +103,17 @@ if ($_SESSION['RollNo']) {
                                 $rollno=$row['RollNo'];
                                 $name=$row['Title'];
                                 $avail=$row['Availability'];
+                              $limits=$row['limits'];
                                 echo "<tr id=$bookid >"
                                 
                             ?>
                                     <td><?php echo strtoupper($rollno) ?></td>
                                     <td><?php echo $bookid ?></td>
                                     <td><b><?php echo $name ?></b></td>
+                                      
                                     <td><?php echo $avail ?></td>
+                                        <td><?php echo $limits ?></td>
+
                                     <!-- dropdown to be added here -->
                                     <td><?php
                                     {
@@ -134,12 +139,13 @@ if ($_SESSION['RollNo']) {
                                       <td><center>
                                         <?php
                                         if($avail > 0)
-                                        {echo "<button onclick='accpet(".$bookid.",".$rollno.")'>Accept</button>";}
+                                        {echo "<button onclick='accpet(".$bookid.",".$rollno.",".$limits.")'>Accept</button>";}
                                          ?>
                                         <a href="reject.php?id1=<?php echo $bookid ?>&id2=<?php echo $rollno ?>" class="btn btn-danger" id="reject-btn">Reject</a>
                                     </center></td>
-                                     
+                                   
                                     </tr>
+                                    
                                <?php } ?>
                                
                                </tbody>
