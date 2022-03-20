@@ -23,10 +23,10 @@ $category=$row['Category'];
 if($conn->query($sql1) === TRUE)
 {$sql3="update LMS.book set Availability=Availability-1 where BookId='$bookid'";
 $result=$conn->query($sql3);
-    $newsql="update LMS.user set limits=limits-1 where RollNo='$rollno'";
-    echo $newsql;
+//     $newsql="update LMS.user set limits=limits-1 where RollNo='$rollno'";
+//     echo $newsql;
  
-  $result=$conn->query($newsql);
+//   $result=$conn->query($newsql);
 
  $sql5="insert into LMS.message (RollNo,Msg,Date,Time) values ('$rollno','Your request for issue of BookId: $bookid  has been accepted',curdate(),curtime())";
  $result=$conn->query($sql5);

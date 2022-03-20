@@ -20,8 +20,8 @@ $sql1="update LMS.record set Date_of_Return=curdate(),Dues='$dues' where BookId=
 if($conn->query($sql1) === TRUE)
 {$sql3="update LMS.book set Availability=Availability+1 where BookId='$bookid'";
  $result=$conn->query($sql3);
- $mysql="update LMS.user set limits=limits+1 where RollNo='$rollno'";
- $result=$conn->query($mysql);
+//  $mysql="update LMS.user set limits=limits+1 where RollNo='$rollno'";
+//  $result=$conn->query($mysql);
  $sql4="delete from LMS.return where BookId='$bookid' and RollNo='$rollno'";
  $result=$conn->query($sql4);
  $sql6="delete from LMS.renew where BookId='$bookid' and RollNo='$rollno'";

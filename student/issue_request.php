@@ -10,6 +10,11 @@ $sql="insert into LMS.record (RollNo,BookId,Time,code) values ('$roll','$id', cu
 if($conn->query($sql) === TRUE)
 {
 echo "<script type='text/javascript'>alert('Request Sent to Admin.')</script>";
+ $newsql="update LMS.user set limits=limits-1 where RollNo='$roll'";
+    echo $newsql;
+ 
+  $result=$conn->query($newsql);
+  
 header( "Refresh:0.01; url=book.php", true, 303);
 }
 else

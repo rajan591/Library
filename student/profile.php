@@ -1,5 +1,4 @@
 <?php
-ob_start();
 require('dbconn.php');
 ?>
 
@@ -23,14 +22,14 @@ require('dbconn.php');
             <div class="navbar-inner">
                 <div class="container">
                     <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
-                        <i class="icon-reorder shaded"></i></a><a class="brand" href="index.php">Patan E-Library </a>
+                        <i class="icon-reorder shaded"></i></a><a class="brand" href="profile.php">Patan E-Library </a>
                     <div class="nav-collapse collapse navbar-inverse-collapse">
                         <ul class="nav pull-right">
                             <li class="nav-user dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <img src="images/profile.png" class="nav-avatar" />
                                 <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="index.php">Your Profile</a></li>
+                                    <li><a href="profile.php">Your Profile</a></li>
                                     <!--li><a href="#">Edit Profile</a></li>
                                     <li><a href="#">Account Settings</a></li-->
                                     <li class="divider"></li>
@@ -51,7 +50,7 @@ require('dbconn.php');
                     <div class="span3">
                         <div class="sidebar">
                             <ul class="widget widget-menu unstyled">
-                                <li class="active"><a href="index.php"><i class="menu-icon icon-home"></i>Home
+                                <li class="active"><a href="profile.php"><i class="menu-icon icon-home"></i>Home
                                 </a></li>
                                  <li><a href="message.php"><i class="menu-icon icon-inbox"></i>Messages</a>
                                 </li>
@@ -68,12 +67,10 @@ require('dbconn.php');
                     </div>
                     <!--/.span3-->
                     <div class="span9">
-                        <div class="module">
-                            <div class="module-head">
-                                <h3>Update Details</h3>
-                            </div>
-                            <div class="module-body">
-
+                        <center>
+                            <div class="card" style="width: 50%;"> 
+                                <img class="card-img-top" src="images/profile2.png" alt="Card image cap">
+                                <div class="card-body">
 
                                 <?php
                                 $rollno = $_SESSION['RollNo'];
@@ -83,65 +80,30 @@ require('dbconn.php');
 
                                 $name=$row['Name'];
                                 $category=$row['Category'];
+                                $status=$row['status'];
+                                echo $status;
                                 $email=$row['EmailId'];
                                 $mobno=$row['MobNo'];
-                                $pswd=$row['Password'];
+                      
                                 ?>    
-                    			
-                                <form class="form-horizontal row-fluid" action="edit_student_details.php?id=<?php echo $rollno ?>" method="post">
+                                    <i>
+                                    <h1 class="card-title"><center><?php echo $name ?></center></h1>
+                                    <br>
+                                    <p><b>Email ID: </b><?php echo $email ?></p>
+                                    <br>
+                                    <p><b>Library ID: </B><?php echo $rollno ?></p>
+                                    <br>
+                                    <p><b>Department: </b><?php echo $category ?></p>
+                                    <br>
+                                    <p><b>Mobile number: </b><?php echo $mobno ?></p>
+                                    </b>
+                                </i>
 
-                                    <div class="control-group">
-                                        <label class="control-label" for="Name"><b>Name:</b></label>
-                                        <div class="controls">
-                                            <input type="text" id="Name" name="Name" value= "<?php echo $name?>" class="span8" required>
-                                        </div>
-                                    </div>
-
-                                    <div class="control-group">
-                                            <label class="control-label" for="Category"><b>Category:</b></label>
-                                            <div class="controls">
-                                                <select name = "Category" tabindex="1" value="SC" data-placeholder="Select Category" class="span6">
-                                                    <option value="<?php echo $category?>"><?php echo $category ?> </option>
-                                                    <option value="GEN">GEN</option>
-                                                    <option value="OBC">OBC</option>
-                                                    <option value="SC">SC</option>
-                                                    <option value="ST">ST</option>
-                                                </select>
-                                            </div>
-                                    </div>
-
-
-                                    <div class="control-group">
-                                        <label class="control-label" for="EmailId"><b>Email Id:</b></label>
-                                        <div class="controls">
-                                            <input type="text" id="EmailId" name="EmailId" value= "<?php echo $email?>" class="span8" required>
-                                        </div>
-                                    </div>
-
-                                    <div class="control-group">
-                                        <label class="control-label" for="MobNo"><b>Mobile Number:</b></label>
-                                        <div class="controls">
-                                            <input type="text" id="MobNo" name="MobNo" value= "<?php echo $mobno?>" class="span8" required>
-                                        </div>
-                                    </div>
-
-                                    <div class="control-group">
-                                        <label class="control-label" for="Password"><b>New Password:</b></label>
-                                        <div class="controls">
-                                            <input type="password" id="Password" name="Password"  value= "<?php echo $pswd?>" class="span8" required>
-                                        </div>
-                                    </div>   
-
-                                    <div class="control-group">
-                                            <div class="controls">
-                                                <button type="submit" name="submit"class="btn-primary"><center>Update Details</center></button>
-                                            </div>
-                                        </div>                                                                     
-
-                                </form>
-                    		           
-                        </div>
-                        </div> 	
+                                </div>
+                            </div>
+                            <br>
+                            <a href="edit_student_details.php" class="btn btn-primary">Edit Details</a>    
+                        </center>               
                     </div>
                     
                     <!--/.span9-->
@@ -163,31 +125,6 @@ require('dbconn.php');
         <script src="scripts/flot/jquery.flot.resize.js" type="text/javascript"></script>
         <script src="scripts/datatables/jquery.dataTables.js" type="text/javascript"></script>
         <script src="scripts/common.js" type="text/javascript"></script>
-
-<?php
-if(isset($_POST['submit']))
-{
-    $rollno = $_GET['id'];
-    $name=$_POST['Name'];
-    $category=$_POST['Category'];
-    $email=$_POST['EmailId'];
-    $mobno=$_POST['MobNo'];
-    $pswd=$_POST['Password'];
-
-$sql1="update LMS.user set Name='$name', Category='$category', EmailId='$email', MobNo='$mobno', Password='$pswd' where RollNo='$rollno'";
-
-
-
-if($conn->query($sql1) === TRUE){
-echo "<script type='text/javascript'>alert('Success')</script>";
-header( "Refresh:0.01; url=index.php", true, 303);
-}
-else
-{//echo $conn->error;
-echo "<script type='text/javascript'>alert('Error')</script>";
-}
-}
-?>
       
     </body>
 

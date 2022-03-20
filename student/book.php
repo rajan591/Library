@@ -1,7 +1,7 @@
 <?php
 require('dbconn.php');
 ?>
-
+<?php error_reporting(E_ERROR | E_PARSE); ?>
 <?php 
 if ($_SESSION['RollNo']) {
     ?>
@@ -12,7 +12,7 @@ if ($_SESSION['RollNo']) {
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Patan E-Library</title>
+        <title>Patan Library</title>
         <link type="text/css" href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <link type="text/css" href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
         <link type="text/css" href="css/theme.css" rel="stylesheet">
@@ -25,7 +25,7 @@ if ($_SESSION['RollNo']) {
             <div class="navbar-inner">
                 <div class="container">
                     <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
-                        <i class="icon-reorder shaded"></i></a><a class="brand" href="index.php">Patan E-Library </a>
+                        <i class="icon-reorder shaded"></i></a><a class="brand" href="index.php">Patan Library </a>
                     <div class="nav-collapse collapse navbar-inverse-collapse">
                         <ul class="nav pull-right">
                             <li class="nav-user dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -61,6 +61,7 @@ if ($_SESSION['RollNo']) {
                                 <li><a href="history.php"><i class="menu-icon icon-tasks"></i>Previously Borrowed Books </a></li>
                                 <li><a href="recommendations.php"><i class="menu-icon icon-list"></i>Recommend Books </a></li>
                                 <li><a href="current.php"><i class="menu-icon icon-list"></i>Currently Issued Books </a></li>
+                                <li><a href="pendingrequest.php"><i class="menu-icon icon-list"></i>Pending Requests</a></li>
                             </ul>
                             <ul class="widget widget-menu unstyled">
                                 <li><a href="logout.php"><i class="menu-icon icon-signout"></i>Logout </a></li>
@@ -89,7 +90,7 @@ if ($_SESSION['RollNo']) {
                                     else
                                         $sql="select * from LMS.book order by Availability DESC";
                                         $RollNo = $_SESSION['RollNo'];
-                                        echo $RollNo;
+                                        // echo $RollNo;
                                         $mysql ="select limits from LMS.user WHERE RollNo=$RollNo";
                                                       $result5=$conn->query($mysql);
 
@@ -97,12 +98,12 @@ if ($_SESSION['RollNo']) {
                                 // $generatedNumber = mysqli_num_rows($res)
                                 if($result5->num_rows > 0){
                                    while($row = $result5->fetch_assoc()){
-                                       echo "Limits:".$row['limits']."<br>";
+                                    //    echo "<h2>Book Limit:</h2>".$row['limits']."<br>";
                                        $limits =$row['limits'];
-                                       echo $limits;
+                                       echo "<h2>Book Limit: $limits</h2>";
                                    }
                                 }  
-                                        echo $mysql;
+                                        // echo $mysql;
 
                                     $result=$conn->query($sql);
                                     $rowcount=mysqli_num_rows($result);
@@ -122,7 +123,7 @@ if ($_SESSION['RollNo']) {
                                       <th>Book name</th>
                                       <th>Availability</th>
                                       <th>Action</th>
-                                      <th>limits</th>
+                                      <!-- <th>limits</th> -->
                                     </tr>
                                   </thead>
                                   <tbody>
@@ -156,7 +157,7 @@ if ($_SESSION['RollNo']) {
                                       		echo "<a href=\"issue_request.php?id=".$bookid."\" class=\"btn btn-success\">Issue</a>";
                                         ?>
                                         </center></td>
-                                        <td><?php echo $limits ?></td>
+                                        <!-- <td><?php echo $limits ?></td> -->
                                     </tr>
                                <?php }} ?>
                                </tbody>
@@ -193,5 +194,6 @@ if ($_SESSION['RollNo']) {
 
 <?php }
 else {
-    echo "<script type='text/javascript'>alert('Access Denied!!!')</script>";
+    require('901kli4589.php');
+    //echo "<script type='text/javascript'>alert('Access Denied!!!')</script>";
 } ?>

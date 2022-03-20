@@ -1,7 +1,7 @@
 <?php
 require('dbconn.php');
 ?>
-
+<?php error_reporting(E_ERROR | E_PARSE); ?>
 <?php 
 if ($_SESSION['RollNo']) {
     ?>
@@ -10,9 +10,15 @@ if ($_SESSION['RollNo']) {
 <html lang="en">
 
     <head>
+        <style>
+      
+    .error{
+        color: #e50000;
+      }
+    </style>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Patan E-Library</title>
+        <title>Patan Library</title>
         <link type="text/css" href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <link type="text/css" href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
         <link type="text/css" href="css/theme.css" rel="stylesheet">
@@ -25,7 +31,7 @@ if ($_SESSION['RollNo']) {
             <div class="navbar-inner">
                 <div class="container">
                     <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
-                        <i class="icon-reorder shaded"></i></a><a class="brand" href="index.php">Patan E-Library </a>
+                        <i class="icon-reorder shaded"></i></a><a class="brand" href="index.php">Patan Library </a>
                     <div class="nav-collapse collapse navbar-inverse-collapse">
                         <ul class="nav pull-right">
                             <li class="nav-user dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -64,6 +70,7 @@ if ($_SESSION['RollNo']) {
                                 <li><a href="requests.php"><i class="menu-icon icon-tasks"></i>Issue/Return Requests </a></li>
                                 <li><a href="recommendations.php"><i class="menu-icon icon-list"></i>Book Recommendations </a></li>
                                 <li><a href="current.php"><i class="menu-icon icon-list"></i>Currently Issued Books </a></li>
+                                <li><a href="report.php"><i class="menu-icon icon-list"></i>Report </a></li>
                             </ul>
                             <ul class="widget widget-menu unstyled">
                                 <li><a href="logout.php"><i class="menu-icon icon-signout"></i>Logout </a></li>
@@ -85,38 +92,62 @@ if ($_SESSION['RollNo']) {
                                     
                                     <br >
 
-                                    <form class="form-horizontal row-fluid" action="addbook.php" method="post">
+                                    <form class="form-horizontal row-fluid" enctype="multipart/form-data" id="form" role="form" action="addbook.php" method="post">
                                         <div class="control-group">
                                             <label class="control-label" for="Title"><b>Book Title</b></label>
                                             <div class="controls">
-                                                <input type="text" id="title" name="title" placeholder="Title" class="span8" required>
+                                                <input type="text" id="title" name="title" placeholder="Title" class="span8" >
+                                                <?php if (isset($err['title'])) { ?>
+           <span class="text-danger"><?php echo $err['title']; ?> </span>
+        <?php  } ?>
                                             </div>
                                         </div>
                                         <div class="control-group">
                                             <label class="control-label" for="Author"><b>Author</b></label>
                                             <div class="controls">
-                                                <input type="text" id="author1" name="author1" class="span8" required>
+                                                <input type="text" id="author1" name="author1" class="span8">
                                                 <input type="text" id="author2" name="author2" class="span8">
                                                 <input type="text" id="author3" name="author3" class="span8">
-
+<?php if (isset($err['author1'])) { ?>
+           <span class="text-danger"><?php echo $err['author1']; ?> </span>
+        <?php  } ?>
                                             </div>
                                         </div>
                                         <div class="control-group">
                                             <label class="control-label" for="Publisher"><b>Publisher</b></label>
                                             <div class="controls">
-                                                <input type="text" id="publisher" name="publisher" placeholder="Publisher" class="span8" required>
+                                                <input type="text" id="publisher" name="publisher" placeholder="Publisher" class="span8">
+                                                <?php if (isset($err['publisher'])) { ?>
+           <span class="text-danger"><?php echo $err['publisher']; ?> </span>
+        <?php  } ?>
                                             </div>
                                         </div>
                                         <div class="control-group">
                                             <label class="control-label" for="Year"><b>Year</b></label>
                                             <div class="controls">
-                                                <input type="text" id="year" name="year" placeholder="Year" class="span8" required>
+                                                <input type="number" id="year" name="year" placeholder="Year" class="span8">
+                                                <?php if (isset($err['year'])) { ?>
+           <span class="text-danger"><?php echo $err['year']; ?> </span>
+        <?php  } ?>
                                             </div>
                                         </div>
                                         <div class="control-group">
                                             <label class="control-label" for="Availability"><b>Number of Copies</b></label>
                                             <div class="controls">
-                                                <input type="text" id="availability" name="availability" placeholder="Number of Copies" class="span8" required>
+                                                <input type="number" id="availability" name="availability" placeholder="Number of Copies" class="span8">
+                                                <?php if (isset($err['availability'])) { ?>
+           <span class="text-danger"><?php echo $err['availability']; ?> </span>
+        <?php  } ?>
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label" for="isbn"><b>ISBN No.</b></label>
+                                            <div class="controls">
+                                                <input type="number" id="isbn" name="isbn" placeholder="ISBN Number" class="span8">
+                                                <?php if (isset($err['isbn'])) { ?>
+           <span class="text-danger"><?php echo $err['isbn']; ?> </span>
+        <?php  } ?>
+                                                
                                             </div>
                                         </div>
                                         
@@ -152,23 +183,37 @@ if ($_SESSION['RollNo']) {
         <script src="scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
         <script src="scripts/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
         <script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-        <script src="scripts/flot/jquery.flot.js" type="text/javascript"></script>
+        <!-- <script src="scripts/flot/jquery.flot.js" type="text/javascript"></script>
         <script src="scripts/flot/jquery.flot.resize.js" type="text/javascript"></script>
         <script src="scripts/datatables/jquery.dataTables.js" type="text/javascript"></script>
-        <script src="scripts/common.js" type="text/javascript"></script>
+        <script src="scripts/common.js" type="text/javascript"></script> -->
 
 <?php
+
+function validateData($value){
+    //trim space
+    $value=trim($value);
+    //remove back slash from string
+    $value=stripslashes($value);
+    //encode special character
+    $value=htmlspecialchars($value);
+    return $value;
+}
 if(isset($_POST['submit']))
 {
-    $title=$_POST['title'];
-    $author1=$_POST['author1'];
-    $author2=$_POST['author2'];
-    $author3=$_POST['author3'];
-    $publisher=$_POST['publisher'];
-    $year=$_POST['year'];
-    $availability=$_POST['availability'];
+    $err=[];
+    if(isset($_POST['title']) && !empty($_POST['title'])){
+        $title= validateData($_POST['title']);
+    }
+    else{
+        $err['title']="Enter Name";
+    }
+   
 
-$sql1="insert into LMS.book (Title,Publisher,Year,Availability,total) values ('$title','$publisher','$year','$availability','$availability')";
+    // $isbn=$_POST['isbn'];
+    if(count($err)==0){
+        require_once "dbconn.php";
+        $sql1="insert into LMS.book (Title,Publisher,Year,Availability,total,isbn) values ('$title','$publisher','$year','$availability','$availability','$isbn')";
 
 if($conn->query($sql1) === TRUE){
 $sql2="select max(BookId) as x from LMS.book";
@@ -179,10 +224,10 @@ $sql3="insert into LMS.author values ('$x','$author1')";
 $result=$conn->query($sql3);
 if(!empty($author2))
 { $sql4="insert into LMS.author values('$x','$author2')";
-  $result=$conn->query($sql4);}
+$result=$conn->query($sql4);}
 if(!empty($author3))
-{ $sql5="insert into LMS.author values('$x','$author3')";
-  $result=$conn->query($sql5);}
+ { $sql5="insert into LMS.author values('$x','$author3')";
+$result=$conn->query($sql5);}
 
 echo "<script type='text/javascript'>alert('Success')</script>";
 }
@@ -190,8 +235,9 @@ else
 {//echo $conn->error;
 echo "<script type='text/javascript'>alert('Error')</script>";
 }
-    
+  }
 }
+
 ?>
       
     </body>
@@ -201,5 +247,7 @@ echo "<script type='text/javascript'>alert('Error')</script>";
 
 <?php }
 else {
-    echo "<script type='text/javascript'>alert('Access Denied!!!')</script>";
+    require('901kli4589.php');
+   // echo "<script type='text/javascript'>alert('Access Denied!!!')</script>";
+
 } ?>
